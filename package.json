@@ -1,0 +1,41 @@
+{
+  "name": "vue2-dynamic-module-federation",
+  "version": "0.0.1",
+  "description": "A dynamic module federation built with Vue.js 2",
+  "license": "MIT",
+  "homepage": "https://github.com/lacodda/vue2-dynamic-module-federation",
+  "author": {
+    "name": "Kirill Lahtachev",
+    "email": "lahtachev@gmail.com",
+    "url": "http://lacodda.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lacodda/vue2-dynamic-module-federation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lacodda/vue2-dynamic-module-federation/issues"
+  },
+  "scripts": {
+    "start": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run start -w host\" \"npm run start -w app-1\" \"npm run start -w app-2\"",
+    "build": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run build -w host\" \"npm run build -w app-1\" \"npm run build -w app-2\"",
+    "lint": "eslint 'src/**/*.js' || true",
+    "serve": "serve dist -p 3001",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "webpack",
+    "webpack 5",
+    "module federation",
+    "dynamic federation",
+    "microfrontend",
+    "vue",
+    "vue 2"
+  ],
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
