@@ -1,21 +1,7 @@
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const { ModuleFederationPlugin } = require('webpack').container;
-const dependencies = require('../package.json').dependencies;
 const common = require('./webpack.common');
-const { port, appId } = require('./config');
-
-function getShared () {
-  const shared = {};
-  for (const key in dependencies) {
-    shared[key] = {
-      eager: true,
-      singleton: true,
-      requiredVersion: dependencies[key],
-    };
-  }
-  return shared;
-}
+const { port } = require('./config');
 
 module.exports = merge(common, {
   // Set the mode to development or production
@@ -27,9 +13,6 @@ module.exports = merge(common, {
     minimize: false,
   },
   target: 'web',
-  output: {
-    publicPath: `http://localhost:${port}/`,
-  },
   // Spin up a server for quick development
   devServer: {
     historyApiFallback: true,
@@ -60,14 +43,5 @@ module.exports = merge(common, {
   plugins: [
     // Only update what has changed on hot reload
     new webpack.HotModuleReplacementPlugin(),
-    new ModuleFederationPlugin({
-      name: appId,
-      filename: 'remoteEntry.js',
-      remotes: {},
-      exposes: {
-        './Module': './src/components/App',
-      },
-      shared: getShared(),
-    }),
   ],
 });

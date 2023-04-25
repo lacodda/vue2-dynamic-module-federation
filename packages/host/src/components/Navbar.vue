@@ -1,7 +1,7 @@
 <template>
   <div class="navbar__container">
     <div class="navbar__menu">
-      <input v-model="host" style="width: 100%" />
+      <input :value="host" style="width: 100%" @input="onInput" />
       <button class="btn" @click="loadServers">Download</button>
       <select :value="selected" @change="setComponent">
         <option value="">Please select one</option>
@@ -14,6 +14,8 @@
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
+type HTMLElementEvent<T extends HTMLElement> = Event & { target: T };
+
 @Component
 export default class Navbar extends Vue {
   @Prop() apps: string[];
@@ -24,8 +26,12 @@ export default class Navbar extends Vue {
     this.$emit('loadServers');
   }
 
-  setComponent (event): void {
+  setComponent (event: HTMLElementEvent<HTMLButtonElement>): void {
     this.$emit('setComponent', event.target.value);
+  }
+
+  onInput (event: HTMLElementEvent<HTMLButtonElement>): void {
+    this.$emit('input', event.target.value);
   }
 }
 </script>

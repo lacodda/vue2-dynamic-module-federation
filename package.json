@@ -20,8 +20,11 @@
     "start": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run start -w host\" \"npm run start -w app-1\" \"npm run start -w app-2\"",
     "build": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run build -w host\" \"npm run build -w app-1\" \"npm run build -w app-2\"",
     "lint": "npm run lint -ws",
-    "serve": "serve dist -p 3001",
-    "clean": "npm run clean -ws"
+    "serve": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run serve:host\" \"npm run serve:app1\" \"npm run serve:app2\"",
+    "serve:host": "serve dist/host -p 3000",
+    "serve:app1": "serve dist/app1 -p 3001",
+    "serve:app2": "serve dist/app2 -p 3002",
+    "clean": "rm -rf dist"
   },
   "keywords": [
     "webpack",

@@ -8,11 +8,9 @@
     "url": "http://lacodda.com"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js --progress",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
-    "lint": "eslint --ext .js,.ts,.vue src --fix",
-    "serve": "serve dist -p 3001",
-    "clean": "rm -rf dist"
+    "start": "cross-env NODE_ENV=development PORT=8082 webpack serve --config config/webpack.dev.js --progress",
+    "build": "cross-env NODE_ENV=production PORT=3002 webpack --config config/webpack.prod.js",
+    "lint": "eslint --ext .js,.ts,.vue src --fix"
   },
   "dependencies": {
     "vue": "^2.7.14",

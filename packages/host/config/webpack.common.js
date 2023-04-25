@@ -1,8 +1,10 @@
+const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { paths, title } = require('./config');
+const moduleFederationConfig = require('./module-federation.config');
 
 module.exports = {
   // Where webpack looks to start building the bundle
@@ -10,8 +12,8 @@ module.exports = {
   // Where webpack outputs the assets and bundles
   output: {
     path: paths.build,
-    filename: '[name].bundle.js',
     publicPath: '/',
+    filename: 'js/[name].[contenthash].bundle.js',
     assetModuleFilename: 'assets/[hash][ext][query]',
   },
   resolve: {
@@ -57,6 +59,10 @@ module.exports = {
       template: paths.src + '/template.html', // template file
       filename: 'index.html', // output file
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+    moduleFederationConfig,
   ],
   // Determine how modules within the project are treated
   module: {

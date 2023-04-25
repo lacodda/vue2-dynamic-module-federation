@@ -1,6 +1,6 @@
 <template>
   <div class="host">
-    <navbar :apps="apps" :selected="selected" :host="host" @loadServers="loadServers" @setComponent="setComponent" />
+    <navbar :apps="apps" :selected="selected" :host="host" @input="host = $event" @loadServers="loadServers" @setComponent="setComponent" />
     <component :is="comp" />
     <div v-if="!comp" class="host__content">
       <div class="host__title">
@@ -18,7 +18,7 @@ import { LoadRemoteModule } from '../load-remote-module';
 export default class App extends Vue {
   loadRemoteModule = new LoadRemoteModule();
   comp = null;
-  host: string = 'http://localhost:8080/assets/apps.json';
+  host: string = process.env.APPS_URL ?? '';
   apps: string[] = [];
   selected: string = '';
 
