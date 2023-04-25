@@ -19,9 +19,9 @@
   "scripts": {
     "start": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run start -w host\" \"npm run start -w app-1\" \"npm run start -w app-2\"",
     "build": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run build -w host\" \"npm run build -w app-1\" \"npm run build -w app-2\"",
-    "lint": "eslint 'src/**/*.js' || true",
+    "lint": "npm run lint -ws",
     "serve": "serve dist -p 3001",
-    "clean": "rm -rf dist"
+    "clean": "npm run clean -ws"
   },
   "keywords": [
     "webpack",

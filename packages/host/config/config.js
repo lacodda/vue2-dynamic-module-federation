@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   paths: {
@@ -12,4 +12,4 @@ module.exports = {
   appId: 'host',
   port: 8080,
   title: 'Host',
-}
+};

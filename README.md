@@ -1,4 +1,4 @@
-# 📦A Vue.js 2 boilerplate (Webpack, Babel, Typescript, SCSS, PostCSS)
+# 📦A dynamic module federation built with Vue.js 2
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 

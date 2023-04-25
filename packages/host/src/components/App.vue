@@ -16,13 +16,13 @@ import { LoadRemoteModule } from '../load-remote-module';
 
 @Component
 export default class App extends Vue {
-  protected loadRemoteModule = new LoadRemoteModule();
-  protected comp = null;
-  protected host: string = 'http://localhost:8080/assets/apps.json';
-  protected apps: string[] = [];
-  protected selected: string = '';
+  loadRemoteModule = new LoadRemoteModule();
+  comp = null;
+  host: string = 'http://localhost:8080/assets/apps.json';
+  apps: string[] = [];
+  selected: string = '';
 
-  protected async setComponent(selected: string) {
+  async setComponent (selected: string) {
     this.selected = selected;
     if (!this.selected) {
       this.comp = null;
@@ -31,7 +31,7 @@ export default class App extends Vue {
     this.comp = (await this.loadRemoteModule.loadComponent(this.selected, './Module')).default;
   }
 
-  protected async loadServers() {
+  async loadServers () {
     await this.loadRemoteModule.setHost(this.host).loadServers();
     this.apps = this.loadRemoteModule.apps;
   }

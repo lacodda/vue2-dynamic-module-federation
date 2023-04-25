@@ -5,7 +5,7 @@
       <button class="btn" @click="loadServers">Download</button>
       <select :value="selected" @change="setComponent">
         <option value="">Please select one</option>
-        <option v-for="(app, key) in apps" :key="key" :value="app">{{ app }}</option>
+        <option v-for="(app, key) in apps" :key="key" :value="app">{{app}}</option>
       </select>
     </div>
   </div>
@@ -16,15 +16,15 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Navbar extends Vue {
-  @Prop() protected apps: string[];
-  @Prop() protected host: string;
-  @Prop() protected selected: string;
+  @Prop() apps: string[];
+  @Prop() host: string;
+  @Prop() selected: string;
 
-  protected loadServers(): void {
+  loadServers (): void {
     this.$emit('loadServers');
   }
 
-  protected setComponent(event): void {
+  setComponent (event): void {
     this.$emit('setComponent', event.target.value);
   }
 }

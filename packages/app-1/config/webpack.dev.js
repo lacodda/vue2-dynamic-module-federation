@@ -3,16 +3,16 @@ const { merge } = require('webpack-merge');
 const { ModuleFederationPlugin } = require('webpack').container;
 const dependencies = require('../package.json').dependencies;
 const common = require('./webpack.common');
-const { paths, port, appId } = require('./config');
+const { port, appId } = require('./config');
 
-function getShared() {
+function getShared () {
   const shared = {};
   for (const key in dependencies) {
     shared[key] = {
       eager: true,
       singleton: true,
       requiredVersion: dependencies[key],
-    }
+    };
   }
   return shared;
 }
