@@ -17,8 +17,8 @@
     "url": "https://github.com/lacodda/vue2-dynamic-module-federation/issues"
   },
   "scripts": {
-    "start": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run start -w host\" \"npm run start -w app-1\" \"npm run start -w app-2\"",
-    "build": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run build -w host\" \"npm run build -w app-1\" \"npm run build -w app-2\"",
+    "start": "node config/start.mjs --mode=development",
+    "build": "node config/start.mjs --mode=production",
     "lint": "npm run lint -ws",
     "serve": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run serve:host\" \"npm run serve:app1\" \"npm run serve:app2\"",
     "serve:host": "serve dist/host -p 3000",
@@ -39,6 +39,6 @@
     "./packages/*"
   ],
   "devDependencies": {
-    "concurrently": "^8.0.1"
+    "zx": "^7.2.2"
   }
 }

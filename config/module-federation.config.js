@@ -1,6 +1,6 @@
+const path = require('path');
 const { ModuleFederationPlugin } = require('webpack').container;
-const dependencies = require('../package.json').dependencies;
-const { appId } = require('./config');
+const dependencies = require(path.resolve('package.json')).dependencies;
 
 function getShared () {
   const shared = {};
@@ -15,7 +15,7 @@ function getShared () {
 }
 
 module.exports = new ModuleFederationPlugin({
-  name: appId,
+  name: process.env.APP_NAME,
   filename: 'remoteEntry.js',
   exposes: {
     './Module': './src/components/App',

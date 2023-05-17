@@ -8,8 +8,6 @@
     "url": "http://lacodda.com"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development PORT=8080 APPS_URL=/assets/apps.json webpack serve --config config/webpack.dev.js --progress",
-    "build": "cross-env NODE_ENV=production PORT=3000 APPS_URL=/assets/apps-prod.json webpack --config config/webpack.prod.js",
     "lint": "eslint --ext .js,.ts,.vue src --fix"
   },
   "dependencies": {
@@ -26,9 +24,9 @@
     "babel-loader": "^9.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^5.0.0",
+    "dotenv": "^16.0.3",
     "eslint": "^8.39.0",
     "eslint-config-standard-with-typescript": "^34.0.1",
     "eslint-import-resolver-webpack": "^0.13.2",

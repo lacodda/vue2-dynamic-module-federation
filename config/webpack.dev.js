@@ -1,7 +1,7 @@
-const webpack = require('webpack');
+require('dotenv').config({ path: '.env.development' });
+const { HotModuleReplacementPlugin } = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
-const { port } = require('./config');
 
 module.exports = merge(common, {
   // Set the mode to development or production
@@ -16,15 +16,21 @@ module.exports = merge(common, {
   // Spin up a server for quick development
   devServer: {
     historyApiFallback: true,
-    open: true,
     compress: true,
     hot: true,
-    port,
+    port: process.env.APP_PORT,
     static: './',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
+    onListening: function (devServer) {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+      // eslint-disable-next-line no-console
+      console.log(`APP_LISTENING|${process.env.APP_NAME}|${process.env.APP_HOST}|${process.env.APP_PORT}`);
     },
   },
   module: {
@@ -43,6 +49,6 @@ module.exports = merge(common, {
   },
   plugins: [
     // Only update what has changed on hot reload
-    new webpack.HotModuleReplacementPlugin(),
+    new HotModuleReplacementPlugin(),
   ],
 });

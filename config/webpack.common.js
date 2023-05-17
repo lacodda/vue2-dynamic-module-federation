@@ -1,8 +1,9 @@
+const { DefinePlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const { paths, title, port } = require('./config');
+const paths = require('./paths');
 const moduleFederationConfig = require('./module-federation.config');
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
   // Where webpack outputs the assets and bundles
   output: {
     path: paths.build,
-    publicPath: `http://localhost:${port}/`,
+    publicPath: `${process.env.APP_HOST}:${process.env.APP_PORT}/`,
     filename: 'js/[name].[contenthash].bundle.js',
     assetModuleFilename: 'assets/[hash][ext][query]',
   },
@@ -53,10 +54,13 @@ module.exports = {
     // Generates an HTML file from a template
     // Generates deprecation warning: https://github.com/jantimon/html-webpack-plugin/issues/1501
     new HtmlWebpackPlugin({
-      title,
+      title: process.env.APP_TITLE,
       favicon: paths.src + '/images/logo.png',
       template: paths.src + '/template.html', // template file
       filename: 'index.html', // output file
+    }),
+    new DefinePlugin({
+      'process.env': JSON.stringify(process.env),
     }),
     moduleFederationConfig,
   ],
