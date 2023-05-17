@@ -6,5 +6,5 @@ module.exports = {
   components: path.resolve('src/components'),
   images: path.resolve('src/images'),
   styles: path.resolve('src/styles'),
-  build: path.resolve('../../dist', process.env.APP_NAME),
+  build: path.resolve(process.env.DIST_DIR, process.env.APP_NAME),
 };

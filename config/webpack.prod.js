@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '.env.production' });
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
 
@@ -32,6 +33,16 @@ module.exports = merge(common, {
     new MiniCssExtractPlugin({
       filename: 'styles/[name].[contenthash].css',
       chunkFilename: 'styles/[name].[contenthash].css',
+    }),
+    new WebpackShellPluginNext({
+      onBuildEnd: {
+        scripts: [() => {
+          // eslint-disable-next-line no-console
+          console.log(`APP_BUILT|${process.env.APP_NAME}|${process.env.APP_HOST}|${process.env.APP_PORT}`);
+        }],
+        blocking: false,
+        parallel: true,
+      },
     }),
   ],
   optimization: {
