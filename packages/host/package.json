@@ -7,9 +7,6 @@
     "email": "lahtachev@gmail.com",
     "url": "http://lacodda.com"
   },
-  "scripts": {
-    "lint": "eslint --ext .js,.ts,.vue src --fix"
-  },
   "dependencies": {
     "vue": "^2.7.14",
     "vue-property-decorator": "^9.1.2",

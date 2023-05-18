@@ -20,7 +20,7 @@
     "start": "node config/start.mjs --mode=development",
     "build": "node config/start.mjs --mode=production",
     "serve": "node config/start.mjs --mode=serve",
-    "lint": "npm run lint -ws"
+    "lint": "eslint --ext .js,.ts,.vue packages/*/src/* --fix"
   },
   "keywords": [
     "webpack",

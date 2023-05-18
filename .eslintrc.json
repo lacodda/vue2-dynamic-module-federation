@@ -24,6 +24,7 @@
     "no-undef": "warn",
     "vue/attribute-hyphenation": "off",
     "vue/component-definition-name-casing": ["warn", "kebab-case"],
+    "vue/comment-directive": "off",
     "vue/html-indent": ["warn", 2, { "alignAttributesVertically": false }],
     "vue/html-self-closing": "off",
     "vue/max-attributes-per-line": ["warn", { "singleline": 10, "multiline": 10 }],
