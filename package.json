@@ -19,12 +19,8 @@
   "scripts": {
     "start": "node config/start.mjs --mode=development",
     "build": "node config/start.mjs --mode=production",
-    "lint": "npm run lint -ws",
-    "serve": "concurrently --names \"Host,App-1,App-2\" -c \"bgBlue.bold,bgMagenta.bold,bgGreen.bold\" \"npm run serve:host\" \"npm run serve:app1\" \"npm run serve:app2\"",
-    "serve:host": "serve dist/host -p 3000",
-    "serve:app1": "serve dist/app1 -p 3001",
-    "serve:app2": "serve dist/app2 -p 3002",
-    "clean": "rm -rf dist"
+    "serve": "node config/start.mjs --mode=serve",
+    "lint": "npm run lint -ws"
   },
   "keywords": [
     "webpack",

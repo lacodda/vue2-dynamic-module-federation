@@ -5,6 +5,7 @@
 import { $, chalk, cd, argv, spinner } from 'zx';
 import { readdir } from 'fs/promises';
 import path from 'path';
+import * as dotenv from 'dotenv';
 
 const PACKAGES_DIR = path.resolve('packages');
 const DIST_DIR = path.resolve('dist');
@@ -26,8 +27,23 @@ async function getDirectories (source) {
     .map(dirent => dirent.name);
 }
 
+async function getPorts () {
+  const ports = {};
+  if (argv.mode !== 'serve') {
+    return ports;
+  }
+  const apps = await getDirectories(PACKAGES_DIR);
+  apps.forEach(async dir => {
+    const appPath = path.resolve(PACKAGES_DIR, dir, '.env.production');
+    dotenv.config({ path: appPath, override: true });
+    ports[process.env.APP_NAME] = process.env.APP_PORT;
+  });
+  return ports;
+}
+
 async function runApps (apps) {
   try {
+    const ports = await getPorts();
     await Promise.all(apps.map(async dir => {
       switch (argv.mode) {
         case 'development':
@@ -35,7 +51,7 @@ async function runApps (apps) {
         case 'production':
           return await webpackBuild(dir);
         case 'serve':
-          return await serve(dir);
+          return await serve(dir, ports[dir]);
         default:
           return true;
       }
@@ -81,10 +97,19 @@ async function webpackBuild (dir) {
   }
 }
 
-async function serve (dir) {
+async function serve (dir, port) {
   try {
     cd(path.resolve(DIST_DIR, dir));
-    await $`npx serve `;
+    const stream = $`npx serve -p ${port}`;
+    const msg = 'INFO  Accepting connections at ';
+    for await (const chunk of stream.stdout) {
+      if (chunk.includes(msg)) {
+        const [, host] = chunk.toString().split(msg);
+        const random = Math.floor(Math.random() * colors.length);
+        // eslint-disable-next-line no-console
+        console.log(chalk.bgGreen.white(' SUCCESS '), 'App', chalk.white.bgHex(colors[random]).bold(` ${dir} `), `serving on ${host}`);
+      }
+    }
   } catch (error) {
     exitWithError(`Error: ${error.message}`);
   }
