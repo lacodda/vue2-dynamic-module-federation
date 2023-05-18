@@ -1,6 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
+// eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
 declare const __webpack_init_sharing__: (scope: 'default') => Promise<void>;
-// eslint-disable-next-line @typescript-eslint/naming-convention
+// eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
 declare const __webpack_share_scopes__: { default: unknown };
 declare const window: Record<string, any>;
 
@@ -49,6 +49,7 @@ export class LoadRemoteModule {
     await __webpack_init_sharing__('default');
     const container = window[scope]; // or get the container somewhere else
     // Initialize the container, it may provide shared modules
+    // eslint-disable-next-line camelcase
     await container.init(__webpack_share_scopes__.default);
     const factory = await container.get(module);
     const Module = factory();
