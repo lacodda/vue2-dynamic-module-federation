@@ -1,16 +1,15 @@
 #! /usr/bin/env node
 
-// start.mjs
+// index.mjs
 
-import { $, chalk, cd, argv, spinner } from 'zx';
-import { readdir } from 'fs/promises';
+import { $, chalk, cd, argv, spinner, fs } from 'zx';
 import path from 'path';
 import * as dotenv from 'dotenv';
 
-const PACKAGES_DIR = path.resolve('packages');
+const APPS_DIR = path.resolve('apps');
 const DIST_DIR = path.resolve('dist');
-const CONFIG_DEV = path.resolve('config', 'webpack.dev.js');
-const CONFIG_PROD = path.resolve('config', 'webpack.prod.js');
+const CONFIG_DEV = path.resolve('config', 'webpack.config.dev.js');
+const CONFIG_PROD = path.resolve('config', 'webpack.config.prod.js');
 const colors = ['#009dd6', '#ec33ec', '#d6f028', '#1034a6', '#edb3eb', '#00cc99', '#fdf35e', '#E74C3C', '#27AE60', '#C70039'];
 $.env.DIST_DIR = DIST_DIR;
 $.verbose = false;
@@ -22,9 +21,12 @@ function exitWithError (errorMessage) {
 }
 
 async function getDirectories (source) {
-  return (await readdir(source, { withFileTypes: true }))
+  if (!await fs.pathExists(source)) {
+    return [path.resolve().replaceAll(path.sep, '/')];
+  }
+  return (await fs.readdir(source, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
+    .map(dirent => path.resolve(source, dirent.name).replaceAll(path.sep, '/'));
 }
 
 async function getPorts () {
@@ -32,24 +34,25 @@ async function getPorts () {
   if (argv.mode !== 'serve') {
     return ports;
   }
-  const apps = await getDirectories(PACKAGES_DIR);
+  const apps = await getDirectories(APPS_DIR);
   apps.forEach(async dir => {
-    const appPath = path.resolve(PACKAGES_DIR, dir, '.env.production');
+    const appPath = path.resolve(APPS_DIR, dir, '.env.production');
     dotenv.config({ path: appPath, override: true });
     ports[process.env.APP_NAME] = process.env.APP_PORT;
   });
   return ports;
 }
 
-async function runApps (apps) {
+async function run (apps) {
   try {
     const ports = await getPorts();
     await Promise.all(apps.map(async dir => {
+      cd(dir);
       switch (argv.mode) {
         case 'development':
-          return await webpackServe(dir);
+          return await webpackServe();
         case 'production':
-          return await webpackBuild(dir);
+          return await webpackBuild();
         case 'serve':
           return await serve(dir, ports[dir]);
         default:
@@ -61,9 +64,8 @@ async function runApps (apps) {
   }
 }
 
-async function webpackServe (dir) {
+async function webpackServe () {
   try {
-    cd(path.resolve(PACKAGES_DIR, dir));
     const stream = $`npx webpack serve --config ${CONFIG_DEV.replaceAll(path.sep, '/')}`;
     for await (const chunk of stream.stdout) {
       if (chunk.includes('APP_LISTENING')) {
@@ -71,7 +73,6 @@ async function webpackServe (dir) {
         const random = Math.floor(Math.random() * colors.length);
         // eslint-disable-next-line no-console
         console.log(chalk.bgGreen.white(' SUCCESS '), 'App', chalk.white.bgHex(colors[random]).bold(` ${appName} `), `starting on ${host}:${port}`);
-        return true;
       }
     }
   } catch (error) {
@@ -79,9 +80,8 @@ async function webpackServe (dir) {
   }
 }
 
-async function webpackBuild (dir) {
+async function webpackBuild () {
   try {
-    cd(path.resolve(PACKAGES_DIR, dir));
     const stream = $`npx webpack --config ${CONFIG_PROD.replaceAll(path.sep, '/')}`;
     for await (const chunk of stream.stdout) {
       if (chunk.includes('APP_BUILT')) {
@@ -89,7 +89,6 @@ async function webpackBuild (dir) {
         const random = Math.floor(Math.random() * colors.length);
         // eslint-disable-next-line no-console
         console.log(chalk.bgGreen.white(' SUCCESS '), 'App', chalk.white.bgHex(colors[random]).bold(` ${appName} `), 'built');
-        return true;
       }
     }
   } catch (error) {
@@ -99,7 +98,6 @@ async function webpackBuild (dir) {
 
 async function serve (dir, port) {
   try {
-    cd(path.resolve(DIST_DIR, dir));
     const stream = $`npx serve -p ${port}`;
     const msg = 'INFO  Accepting connections at ';
     for await (const chunk of stream.stdout) {
@@ -123,5 +121,5 @@ if (argv.mode === 'production') {
   await $`rm -rf ${DIST_DIR.replaceAll(path.sep, '/')}`;
 }
 
-const apps = await getDirectories(argv.mode === 'serve' ? DIST_DIR : PACKAGES_DIR);
-await spinner('working...', () => runApps(apps));
+const apps = await getDirectories(argv.mode === 'serve' ? DIST_DIR : APPS_DIR);
+await spinner('working...', () => run(apps));

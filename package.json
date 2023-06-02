@@ -1,6 +1,6 @@
 {
   "name": "vue2-dynamic-module-federation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A dynamic module federation built with Vue.js 2",
   "license": "MIT",
   "homepage": "https://github.com/lacodda/vue2-dynamic-module-federation",
@@ -17,10 +17,10 @@
     "url": "https://github.com/lacodda/vue2-dynamic-module-federation/issues"
   },
   "scripts": {
-    "start": "node config/start.mjs --mode=development",
-    "build": "node config/start.mjs --mode=production",
-    "serve": "node config/start.mjs --mode=serve",
-    "lint": "eslint --ext .js,.ts,.vue packages/*/src/* --fix"
+    "start": "node config/index.mjs --mode=development",
+    "build": "node config/index.mjs --mode=production",
+    "serve": "node config/index.mjs --mode=serve",
+    "lint": "eslint --ext .js,.ts,.vue apps/*/src/* --fix"
   },
   "keywords": [
     "webpack",
@@ -32,7 +32,7 @@
     "vue 2"
   ],
   "workspaces": [
-    "./packages/*"
+    "./apps/*"
   ],
   "devDependencies": {
     "zx": "^7.2.2"
