@@ -26,7 +26,7 @@ async function getDirectories (source) {
   }
   return (await fs.readdir(source, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
-    .map(dirent => path.resolve(source, dirent.name).replaceAll(path.sep, '/'));
+    .map(dirent => [dirent.name, path.resolve(source, dirent.name).replaceAll(path.sep, '/')]);
 }
 
 async function getPorts () {
@@ -35,7 +35,7 @@ async function getPorts () {
     return ports;
   }
   const apps = await getDirectories(APPS_DIR);
-  apps.forEach(async dir => {
+  apps.forEach(async ([dir]) => {
     const appPath = path.resolve(APPS_DIR, dir, '.env.production');
     dotenv.config({ path: appPath, override: true });
     ports[process.env.APP_NAME] = process.env.APP_PORT;
@@ -46,8 +46,8 @@ async function getPorts () {
 async function run (apps) {
   try {
     const ports = await getPorts();
-    await Promise.all(apps.map(async dir => {
-      cd(dir);
+    await Promise.all(apps.map(async ([dir, path]) => {
+      cd(path);
       switch (argv.mode) {
         case 'development':
           return await webpackServe();

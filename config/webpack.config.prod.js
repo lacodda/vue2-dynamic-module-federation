@@ -8,7 +8,7 @@ module.exports = {
   entry: [common.aliases.main],
   // Where webpack outputs the assets and bundles
   output: {
-    path: common.aliases.build,
+    path: `${process.env.DIST_DIR}/${process.env.APP_NAME}`,
     publicPath: `${process.env.APP_HOST}:${process.env.APP_PORT}/`,
     filename: 'js/[name].[chunkhash].bundle.js',
     chunkFilename: 'js/[name].[chunkhash].chunk.js',
@@ -30,19 +30,6 @@ module.exports = {
     minimize: true,
     sideEffects: true,
     concatenateModules: true,
-    runtimeChunk: 'single',
-    splitChunks: {
-      chunks: 'all',
-      maxInitialRequests: 10,
-      minSize: 0,
-      cacheGroups: {
-        vendor: {
-          name: 'vendors',
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-        },
-      },
-    },
   },
   performance: {
     hints: false,

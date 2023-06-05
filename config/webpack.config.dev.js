@@ -25,9 +25,6 @@ module.exports = {
   stats: 'errors-warnings',
   devtool: 'inline-source-map',
   optimization: {
-    // splitChunks: {
-    //   chunks: 'all',
-    // },
     minimize: false,
   },
   performance: {
