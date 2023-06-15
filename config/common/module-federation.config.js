@@ -14,11 +14,17 @@ function getShared () {
   return shared;
 }
 
-module.exports = new ModuleFederationPlugin({
-  name: process.env.APP_NAME,
-  filename: 'remoteEntry.js',
-  exposes: {
-    './Module': './src/components/App',
-  },
-  shared: getShared(),
-});
+function getModuleFederationPlugin () {
+  return new ModuleFederationPlugin({
+    name: process.env.APP_NAME,
+    filename: 'remoteEntry.js',
+    exposes: {
+      './Module': './src/components/App',
+    },
+    shared: getShared(),
+  });
+}
+
+module.exports = {
+  getModuleFederationPlugin,
+};

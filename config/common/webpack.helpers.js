@@ -8,6 +8,10 @@ function isDev () {
   return process.env.NODE_ENV === 'development';
 }
 
+function isMfe () {
+  return process.env.IS_MFE === 'true';
+}
+
 /**
  * Create webpack aliases
  */
@@ -22,5 +26,6 @@ function createWebpackAliases (aliases) {
 // Export helpers
 module.exports = {
   isDev,
+  isMfe,
   createWebpackAliases,
 };

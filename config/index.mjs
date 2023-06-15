@@ -12,6 +12,7 @@ const CONFIG_DEV = path.resolve('config', 'webpack.config.dev.js');
 const CONFIG_PROD = path.resolve('config', 'webpack.config.prod.js');
 const colors = ['#009dd6', '#ec33ec', '#d6f028', '#1034a6', '#edb3eb', '#00cc99', '#fdf35e', '#E74C3C', '#27AE60', '#C70039'];
 $.env.DIST_DIR = DIST_DIR;
+$.env.IS_MFE = await fs.pathExists(APPS_DIR);
 $.verbose = false;
 
 function exitWithError (errorMessage) {
@@ -22,7 +23,7 @@ function exitWithError (errorMessage) {
 
 async function getDirectories (source) {
   if (!await fs.pathExists(source)) {
-    return [path.resolve().replaceAll(path.sep, '/')];
+    return [['app', path.resolve().replaceAll(path.sep, '/')]];
   }
   return (await fs.readdir(source, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
@@ -35,9 +36,9 @@ async function getPorts () {
     return ports;
   }
   const apps = await getDirectories(APPS_DIR);
-  apps.forEach(async ([dir]) => {
-    const appPath = path.resolve(APPS_DIR, dir, '.env.production');
-    dotenv.config({ path: appPath, override: true });
+  apps.forEach(async ([_dir, appPath]) => {
+    const envPath = path.resolve(appPath, '.env.production');
+    dotenv.config({ path: envPath, override: true });
     ports[process.env.APP_NAME] = process.env.APP_PORT;
   });
   return ports;
@@ -46,8 +47,8 @@ async function getPorts () {
 async function run (apps) {
   try {
     const ports = await getPorts();
-    await Promise.all(apps.map(async ([dir, path]) => {
-      cd(path);
+    await Promise.all(apps.map(async ([dir, appPath]) => {
+      cd(appPath);
       switch (argv.mode) {
         case 'development':
           return await webpackServe();

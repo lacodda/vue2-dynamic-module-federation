@@ -4,12 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
-const { isDev } = require('./webpack.helpers');
+const { isDev, isMfe } = require('./webpack.helpers');
 const aliases = require('./webpack.aliases');
-const moduleFederationConfig = require('./module-federation.config');
+const { getModuleFederationPlugin } = require('./module-federation.config');
 
 module.exports = [
-  moduleFederationConfig,
+  isMfe() && getModuleFederationPlugin(),
   new ForkTsCheckerWebpackPlugin(),
   // Copies files from target to destination folder
   new CopyWebpackPlugin({
@@ -29,7 +29,7 @@ module.exports = [
   new HtmlWebpackPlugin({
     title: process.env.APP_TITLE,
     favicon: aliases.images + '/logo.png',
-    template: aliases.src + '/template.html', // template file
+    template: aliases.src + '/index.html', // template file
     filename: 'index.html', // output file
   }),
   new webpack.DefinePlugin({
