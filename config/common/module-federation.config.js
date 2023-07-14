@@ -18,9 +18,11 @@ function getModuleFederationPlugin () {
   return new ModuleFederationPlugin({
     name: process.env.APP_NAME,
     filename: 'remoteEntry.js',
-    exposes: {
-      './Module': './src/components/App',
-    },
+    exposes: process.env.APP_EXPOSES
+      ? JSON.parse(process.env.APP_EXPOSES ?? '')
+      : {
+        './Module': './src/components/App',
+      },
     shared: getShared(),
   });
 }
