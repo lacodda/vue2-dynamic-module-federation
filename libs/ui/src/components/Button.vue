@@ -1,31 +1,17 @@
-html {
-  font-size: var(--font-size);
-  font-family: var(--font-family);
-  color: var(--black);
-}
+<template>
+  <button class="btn" @click="$emit('click')">
+    <slot></slot>
+  </button>
+</template>
 
-h1 {
-  font-size: 2.6rem;
-}
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 
-h2 {
-  font-size: 1.6rem;
-}
+@Component
+export default class Button extends Vue { }
+</script>
 
-h3 {
-  font-size: 1.1rem;
-}
-
-input, textarea, select {
-  padding: .45rem .5rem;
-  border-color: transparent;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
-  line-height: 0.5rem;
-  height: min-content;
-  color: var(--black);
-}
-
+<style scoped lang="scss">
 .btn {
   background-image: linear-gradient(to top, var(--teal) 0%, var(--blue) 51%, var(--teal) 100%);
   padding: .75rem .5rem;
@@ -44,6 +30,12 @@ input, textarea, select {
   align-items: center;
   height: min-content;
 
+  &[size=l] {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+
   &:hover {
     background-position: right center;
     /* change the direction of the change here */
@@ -51,3 +43,4 @@ input, textarea, select {
     text-decoration: none;
   }
 }
+</style>

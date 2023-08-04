@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import App from 'components/App.vue';
-import 'styles/index.scss';
-
-Vue.component('navbar', async () => await import('components/Navbar.vue'));
+import '@libs/ui';
 
 export default new Vue({
   render: (h) => h(App),

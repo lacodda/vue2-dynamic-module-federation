@@ -1,6 +1,13 @@
 <template>
   <div class="host">
-    <navbar :apps="apps" :selected="selected" :host="host" @input="host = $event" @loadServers="loadServers" @setComponent="setComponent" />
+    <navbar-el>
+      <input :value="host" style="width: 100%" @input="setHost" />
+      <button-el @click="loadServers">Download</button-el>
+      <select :value="selected" @change="setComponent">
+        <option value="">Please select one</option>
+        <option v-for="(app, key) in apps" :key="key" :value="app">{{app}}</option>
+      </select>
+    </navbar-el>
     <component :is="comp" />
     <div v-if="!comp" class="host__content">
       <div class="host__title">
@@ -12,18 +19,24 @@
 
 <script lang='ts'>
 import { Component, Vue } from 'vue-property-decorator';
-import { LoadRemoteModule } from '../load-remote-module';
+import { LoadRemoteModule } from '@libs/utils';
+
+type HTMLElementEvent<T extends HTMLElement> = Event & { target: T };
 
 @Component
 export default class App extends Vue {
   loadRemoteModule = new LoadRemoteModule();
-  comp = null;
+  comp: any = null;
   host: string = process.env.APPS_URL ?? '';
   apps: string[] = [];
   selected: string = '';
 
-  async setComponent (selected: string) {
-    this.selected = selected;
+  setHost (event: HTMLElementEvent<HTMLButtonElement>): void {
+    this.host = event.target.value;
+  }
+
+  async setComponent (event: HTMLElementEvent<HTMLButtonElement>): Promise<void> {
+    this.selected = event.target.value;
     if (!this.selected) {
       this.comp = null;
       return;
@@ -50,6 +63,7 @@ export default class App extends Vue {
     width: 100%;
     height: 100%;
     h1 {
+      font-size: 2.6rem;
       width: max-content;
       text-transform: uppercase;
       background: var(--teal);
