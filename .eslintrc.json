@@ -1,5 +1,21 @@
 {
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended",
+    "standard-with-typescript",
+    "@vue/eslint-config-typescript"    
+  ],
   "rules": {
+    "vue/attribute-hyphenation": "off",
+    "vue/component-definition-name-casing": ["warn", "kebab-case"],
+    "vue/comment-directive": "off",
+    "vue/html-indent": ["warn", 2, { "alignAttributesVertically": false }],
+    "vue/html-self-closing": "off",
+    "vue/max-attributes-per-line": ["warn", { "singleline": 10, "multiline": 10 }],
+    "vue/multi-word-component-names": "off",
+    "vue/mustache-interpolation-spacing": ["warn", "never"],
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/v-slot-style": "off",
     "arrow-body-style": 1,
     "camelcase": 1,
     "comma-dangle": ["error", "always-multiline"],
@@ -22,16 +38,6 @@
     "no-multi-spaces": ["error"],
     "no-prototype-builtins": "off",
     "no-undef": "warn",
-    "vue/attribute-hyphenation": "off",
-    "vue/component-definition-name-casing": ["warn", "kebab-case"],
-    "vue/comment-directive": "off",
-    "vue/html-indent": ["warn", 2, { "alignAttributesVertically": false }],
-    "vue/html-self-closing": "off",
-    "vue/max-attributes-per-line": ["warn", { "singleline": 10, "multiline": 10 }],
-    "vue/multi-word-component-names": "off",
-    "vue/mustache-interpolation-spacing": ["warn", "never"],
-    "vue/singleline-html-element-content-newline": "off",
-    "vue/v-slot-style": "off",
     "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
     "@typescript-eslint/indent": ["error", 2, { "SwitchCase": 1 } ],
     "@typescript-eslint/no-unused-vars": ["warn", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
@@ -55,16 +61,17 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:vue/recommended",
-    "standard-with-typescript",
-    "@vue/eslint-config-typescript"
-  ],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
     "project": "./tsconfig.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".vue"]
+      }
+    }
   },
   "plugins": []
 }

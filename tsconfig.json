@@ -20,8 +20,8 @@
     "outDir": "dist",
     "paths": {
       "@/*": ["src/*"],
-      "@libs/ui": ["../../libs/ui/src"],
-      "@libs/utils": ["../../libs/utils/src"]
+      "@libs/ui": ["../../libs/ui/src", "libs/ui/src"],
+      "@libs/utils": ["../../libs/utils/src", "libs/utils/src"]
     }
   },
   "exclude": ["node_modules", "dist"]

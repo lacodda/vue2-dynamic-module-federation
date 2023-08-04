@@ -8,8 +8,8 @@
         <option v-for="(app, key) in apps" :key="key" :value="app">{{app}}</option>
       </select>
     </navbar-el>
-    <component :is="comp" />
-    <div v-if="!comp" class="host__content">
+    <component :is="dynamicComponent" />
+    <div v-if="!dynamicComponent" class="host__content">
       <div class="host__title">
         <h1>Host</h1>
       </div>
@@ -26,7 +26,7 @@ type HTMLElementEvent<T extends HTMLElement> = Event & { target: T };
 @Component
 export default class App extends Vue {
   loadRemoteModule = new LoadRemoteModule();
-  comp: any = null;
+  dynamicComponent: any = null;
   host: string = process.env.APPS_URL ?? '';
   apps: string[] = [];
   selected: string = '';
@@ -38,13 +38,13 @@ export default class App extends Vue {
   async setComponent (event: HTMLElementEvent<HTMLButtonElement>): Promise<void> {
     this.selected = event.target.value;
     if (!this.selected) {
-      this.comp = null;
+      this.dynamicComponent = null;
       return;
     }
-    this.comp = (await this.loadRemoteModule.loadComponent(this.selected, './Module')).default;
+    this.dynamicComponent = (await this.loadRemoteModule.loadComponent(this.selected, './Module')).default;
   }
 
-  async loadServers () {
+  async loadServers (): Promise<void> {
     await this.loadRemoteModule.setHost(this.host).loadServers();
     this.apps = this.loadRemoteModule.apps;
   }
@@ -63,7 +63,7 @@ export default class App extends Vue {
     width: 100%;
     height: 100%;
     h1 {
-      font-size: 2.6rem;
+      font-size: var(--font-size-h1);
       width: max-content;
       text-transform: uppercase;
       background: var(--teal);
